@@ -21,14 +21,11 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public ServerResponse<User> login(String username, String password) {
-        System.out.println("Login Service Password: " + password);
         int result_cnt = userMapper.checkUsername(username);
         if (result_cnt == 0)
             return ServerResponse.createByError("用户名不存在");
 
-        System.out.println("Login Password Origin: " + password);
         String md5_passwd = MD5Util.MD5EncodeUtf8(password);
-        System.out.println("Login MD5Password: " + md5_passwd);
         User user = userMapper.selectLogin(username, md5_passwd);
         if (user == null)
             return ServerResponse.createByError("密码错误");
@@ -164,5 +161,12 @@ public class UserServiceImpl implements IUserService {
             return ServerResponse.createByError("找不到当前用户");
         user.setPassword(StringUtils.EMPTY);
         return ServerResponse.createBySuccess(user);
+    }
+
+    @Override
+    public ServerResponse checkAdminRole(User user) {
+        if (user != null && user.getRole().intValue() == Const.Role.ROLE_ADMIN)
+            return ServerResponse.createBySuccess();
+        return ServerResponse.createByError();
     }
 }

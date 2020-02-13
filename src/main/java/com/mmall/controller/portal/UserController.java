@@ -34,8 +34,6 @@ public class UserController {
     @ResponseBody
     public ServerResponse<User> login(String username, String password, HttpSession session) {
         // controller --> service --> mybatis --> dao
-        System.out.println("Login Controller Username: " + username);
-        System.out.println("Login Controller Password: " + password);
         ServerResponse<User> response = iUserService.login(username, password);
         if (response.isSuccess())
             session.setAttribute(Const.CURRENT_USER, response.getData());
@@ -87,8 +85,7 @@ public class UserController {
     @RequestMapping(value = "forget_reset_password.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> forgetResetPassword(String username, String newPassword, String tok)
-    {
-        System.out.println("Controller forgetResetPassword"); return iUserService.forgetResetPassword(username, newPassword, tok); }
+    { return iUserService.forgetResetPassword(username, newPassword, tok); }
 
     @RequestMapping(value = "reset_password.do", method = RequestMethod.POST)
     @ResponseBody
