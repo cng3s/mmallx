@@ -115,4 +115,50 @@
       update_time = now()
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectCartByUserIdProductId" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List" />
+    from mmall_cart
+    where user_id=#{userId} and product_id=#{productId}
+  </select>
+
+  <select id="selectCartByUserId" resultMap="BaseResultMap" parameterType="integer">
+    select
+    <include refid="Base_Column_List" />
+    from mmall_cart
+    where user_id=#{userId}
+  </select>
+
+  <select id="selectCartProductCheckedStatusByUserId" resultType="int" parameterType="int">
+    select count(1) from mmall_cart where checked = 0 and user_id = #{userId}
+  </select>
+
+  <delete id="deleteByUserIdProductIds" parameterType="map">
+    delete from mmall_cart
+    where user_id=#{userId}
+    <if test="productIdList != null">
+      and product_id in
+      <foreach collection="productIdList" item="item" index="index" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+  </delete>
+
+  <update id="checkedOrUnCheckedProduct" parameterType="map">
+    update mmall_cart
+    set checked = #{checked}, update_time = now()
+    where user_id=#{userId}
+    <if test="productId != null">
+      and product_id = #{productId}
+    </if>
+  </update>
+
+<!--  返回用户购物车商品总数量
+  IFNULL(sum(quantity), 0)意思是如果用户购物车中商品总数量是0的话，则返回0.
+  如果不加IFNULL，则sum(quantity)当用户购物车中商品总数量是0的情况下，返回null。这样必然会在上层暴露出异常
+-->
+  <select id="selectCartProductCount" parameterType="int" resultType="java.lang.Integer">
+    select IFNULL(sum(quantity), 0) as count from mmall_cart where user_id=#{userId}
+  </select>
 </mapper>
