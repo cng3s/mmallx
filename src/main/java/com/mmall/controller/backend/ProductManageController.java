@@ -35,11 +35,10 @@ public class ProductManageController {
     private IFileService iFileService;
 
 
-
     @RequestMapping("save.do")
     @ResponseBody
     public ServerResponse<String> productSave(HttpSession session, Product product) {
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null)
             return ServerResponse.createByError("用户未登录");
         if (iUserService.checkAdminRole(user).isSuccess())
@@ -51,7 +50,7 @@ public class ProductManageController {
     @ResponseBody
     public ServerResponse<String> setSaleStatus(
             HttpSession session, Integer productId, Integer status) {
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null)
             return ServerResponse.createByError("用户未登录");
         if (iUserService.checkAdminRole(user).isSuccess())
@@ -62,7 +61,7 @@ public class ProductManageController {
     @RequestMapping("detail.do")
     @ResponseBody
     public ServerResponse<?> getDetail(HttpSession session, Integer productId) {
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null)
             return ServerResponse.createByError("用户未登录");
         if (iUserService.checkAdminRole(user).isSuccess())
@@ -75,7 +74,7 @@ public class ProductManageController {
     public ServerResponse<?> getList(HttpSession session
             , @RequestParam(value = "pageNum", defaultValue = "1") int pageNum
             , @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null)
             return ServerResponse.createByError("用户未登录");
         if (iUserService.checkAdminRole(user).isSuccess())
@@ -88,7 +87,7 @@ public class ProductManageController {
     public ServerResponse<?> productSearch(HttpSession session, String productName, Integer productId
             , @RequestParam(value = "pageNum", defaultValue = "1") int pageNum
             , @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null)
             return ServerResponse.createByError("用户未登录");
         if (iUserService.checkAdminRole(user).isSuccess())
@@ -105,7 +104,7 @@ public class ProductManageController {
 
         System.out.println("upload.do 1.开始准备上传文件");
 
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null)
             return ServerResponse.createByError(ResponseCode.NEED_LOGIN.getCode()
                     , "用户未登录，请登录管理员权限用户");
@@ -131,7 +130,7 @@ public class ProductManageController {
             , HttpServletRequest request
             , HttpServletResponse response) {
         Map resultMap = Maps.newHashMap();
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
             resultMap.put("success", false);
             resultMap.put("msg", "请登录管理员权限用户");

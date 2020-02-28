@@ -108,13 +108,14 @@ public class ProductServiceImpl implements IProductService {
 
     /**
      * getProductList - 获取分页后的产品列表信息
-     * @param pageNum : 第pageNum页
+     *
+     * @param pageNum  : 第pageNum页
      * @param pageSize : 每页显示pageSize个商品
      * @return : 返回指定的pageNum页检索出的pageSize个商品信息
      * 初始化PageHelper ---> 检索mysql并把结果返回给productList
      * ---> 遍历productList，把每个产品需要的部分信息提取出并组成新的队列productListVoList
      * ---> 把productListVoList的信息装入PageInfo数据结构中并返回，这样pageHelper就可以起作用
-     * */
+     */
     public ServerResponse<PageInfo> getProductList(int pageNum, int pageSize) {
         // startPage -- start ---> 填充sql逻辑 ---> pageHelper -- 收尾
         PageHelper.startPage(pageNum, pageSize);
@@ -198,7 +199,7 @@ public class ProductServiceImpl implements IProductService {
         if (StringUtils.isNotBlank(orderBy)) {
             if (Const.ProductListOrderBy.PRICE_ASC_DESC.contains(orderBy)) {
                 String[] orderByArr = orderBy.split("_");
-                PageHelper.orderBy(orderByArr[0]+" "+orderByArr[1]);
+                PageHelper.orderBy(orderByArr[0] + " " + orderByArr[1]);
             }
         }
         List<Product> productList = productMapper.selectByNameAndCategoryIds(

@@ -44,6 +44,7 @@ public class ShippingController {
         }
         return iShippingService.del(user.getId(), shippingId);
     }
+
     @RequestMapping("update.do")
     @ResponseBody
     public ServerResponse<String> update(HttpSession session, Shipping shipping) {

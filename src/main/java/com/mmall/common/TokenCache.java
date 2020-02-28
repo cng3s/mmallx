@@ -25,7 +25,10 @@ public class TokenCache {
                         }
                     });
 
-    public static void setKey(String key, String value) { localCache.put(key, value); }
+    public static void setKey(String key, String value) {
+        localCache.put(key, value);
+    }
+
     public static String getKey(String key) {
         String val = null;
         try {

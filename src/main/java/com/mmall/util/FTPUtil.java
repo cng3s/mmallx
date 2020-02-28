@@ -39,7 +39,7 @@ public class FTPUtil {
     }
 
     private boolean uploadFile(String remotePath, List<File> fileList) throws IOException {
-        boolean uploaded = true;
+        boolean uploaded = false;
         FileInputStream stream = null;
         if (connectServer(ip, port, user, pwd)) {
             try {

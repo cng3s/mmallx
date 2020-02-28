@@ -11,12 +11,16 @@ public enum ResponseCode {
     private final String desc; // 描述信息
 
 
-
     ResponseCode(int code, String desc) {
         this.code = code;
         this.desc = desc;
     }
 
-    public int getCode() { return code; }
-    public String getDesc() { return desc; }
+    public int getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
 }

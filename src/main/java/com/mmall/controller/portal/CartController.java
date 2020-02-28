@@ -24,9 +24,9 @@ public class CartController {
     @RequestMapping("add.do")
     @ResponseBody
     public ServerResponse<CartVo> add(HttpSession session
-            , @RequestParam("count")Integer count
-            , @RequestParam("productId")Integer productId) {
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
+            , @RequestParam("count") Integer count
+            , @RequestParam("productId") Integer productId) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
             return ServerResponse.createByError(ResponseCode.NEED_LOGIN.getCode()
                     , ResponseCode.NEED_LOGIN.getDesc());
@@ -39,7 +39,7 @@ public class CartController {
     public ServerResponse<CartVo> update(HttpSession session
             , @RequestParam("count") Integer count
             , @RequestParam("productId") Integer productId) {
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
             return ServerResponse.createByError(ResponseCode.NEED_LOGIN.getCode()
                     , ResponseCode.NEED_LOGIN.getDesc());
@@ -51,7 +51,7 @@ public class CartController {
     @ResponseBody
     public ServerResponse<CartVo> delete(HttpSession session
             , @RequestParam("productIds") String productIds) {
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
             return ServerResponse.createByError(ResponseCode.NEED_LOGIN.getCode()
                     , ResponseCode.NEED_LOGIN.getDesc());
@@ -62,7 +62,7 @@ public class CartController {
     @RequestMapping("list.do")
     @ResponseBody
     public ServerResponse<CartVo> list(HttpSession session) {
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
             return ServerResponse.createByError(ResponseCode.NEED_LOGIN.getCode()
                     , ResponseCode.NEED_LOGIN.getDesc());
@@ -73,7 +73,7 @@ public class CartController {
     @RequestMapping("select_all.do")
     @ResponseBody
     public ServerResponse<CartVo> selectAll(HttpSession session) {
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
             return ServerResponse.createByError(ResponseCode.NEED_LOGIN.getCode()
                     , ResponseCode.NEED_LOGIN.getDesc());
@@ -84,7 +84,7 @@ public class CartController {
     @RequestMapping("un_select_all.do")
     @ResponseBody
     public ServerResponse<CartVo> unSelect(HttpSession session) {
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
             return ServerResponse.createByError(ResponseCode.NEED_LOGIN.getCode()
                     , ResponseCode.NEED_LOGIN.getDesc());
@@ -95,7 +95,7 @@ public class CartController {
     @RequestMapping("select.do")
     @ResponseBody
     public ServerResponse<CartVo> select(HttpSession session, Integer productId) {
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
             return ServerResponse.createByError(ResponseCode.NEED_LOGIN.getCode()
                     , ResponseCode.NEED_LOGIN.getDesc());
@@ -108,7 +108,7 @@ public class CartController {
     @ResponseBody
     public ServerResponse<CartVo> unSelect(HttpSession session, Integer productId) {
         System.out.println("Unselect is here");
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
             return ServerResponse.createByError(ResponseCode.NEED_LOGIN.getCode()
                     , ResponseCode.NEED_LOGIN.getDesc());
@@ -119,7 +119,7 @@ public class CartController {
     @RequestMapping("get_cart_product_count.do")
     @ResponseBody
     public ServerResponse<Integer> getCartProductCount(HttpSession session) {
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
             return ServerResponse.createBySuccess(0);
         }

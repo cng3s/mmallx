@@ -27,7 +27,7 @@ public class CategoryManageController {
     @ResponseBody
     public ServerResponse addCategory(HttpSession session, String categoryName
             , @RequestParam(value = "parentId", defaultValue = "0") int parentId) {
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null)
             return ServerResponse.createByError(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
         if (iUserService.checkAdminRole(user).isSuccess())
@@ -38,7 +38,7 @@ public class CategoryManageController {
     @RequestMapping("set_category_name.do")
     @ResponseBody
     public ServerResponse setCategoryName(HttpSession session, Integer categoryId, String categoryName) {
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null)
             return ServerResponse.createByError(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
         if (iUserService.checkAdminRole(user).isSuccess())
@@ -50,7 +50,7 @@ public class CategoryManageController {
     @ResponseBody
     public ServerResponse getChildrenParallelCategory(HttpSession session
             , @RequestParam(value = "categoryId", defaultValue = "0") int categoryId) {
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null)
             return ServerResponse.createByError(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
         if (iUserService.checkAdminRole(user).isSuccess()) {
@@ -63,7 +63,7 @@ public class CategoryManageController {
     @ResponseBody
     public ServerResponse getCategoryAndDeepChildrenCategory(HttpSession session
             , @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId) {
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null)
             return ServerResponse.createByError(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
         if (iUserService.checkAdminRole(user).isSuccess())

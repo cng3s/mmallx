@@ -89,7 +89,7 @@ public class UserServiceImpl implements IUserService {
 
         // 使用UUID生成重复概率极小的字符串作为token
         String forget_tok = UUID.randomUUID().toString();
-        TokenCache.setKey(TokenCache.TOKEN_PREFIX+username, forget_tok);
+        TokenCache.setKey(TokenCache.TOKEN_PREFIX + username, forget_tok);
         return ServerResponse.createBySuccess(forget_tok);
     }
 
@@ -101,7 +101,7 @@ public class UserServiceImpl implements IUserService {
         ServerResponse<String> check = checkValid(username, Const.USERNAME);
         if (check.isSuccess())
             return ServerResponse.createByError("用户不存在");
-        String curtoken = TokenCache.getKey(TokenCache.TOKEN_PREFIX+username);
+        String curtoken = TokenCache.getKey(TokenCache.TOKEN_PREFIX + username);
         if (StringUtils.isBlank(curtoken))
             return ServerResponse.createByError("token无效或过期");
         System.out.println("Check error parameters done!");

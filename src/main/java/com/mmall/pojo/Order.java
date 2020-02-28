@@ -6,31 +6,31 @@ import java.util.Date;
 public class Order {
     private Integer id;
 
-    private Long orderNo;
+    private Long orderNo; // 订单号
 
-    private Integer userId;
+    private Integer userId; // 用户
 
-    private Integer shippingId;
+    private Integer shippingId; // 交易号
 
-    private BigDecimal payment;
+    private BigDecimal payment; // 订单价格
 
-    private Integer paymentType;
+    private Integer paymentType; // 付款方式
 
-    private Integer postage;
+    private Integer postage; // 邮费
 
-    private Integer status;
+    private Integer status; // 交易状态
 
-    private Date paymentTime;
+    private Date paymentTime; // 支付时间
 
-    private Date sendTime;
+    private Date sendTime; // 发货时间
 
-    private Date endTime;
+    private Date endTime; // 交易完成时间
 
-    private Date closeTime;
+    private Date closeTime; // 关闭交易时间
 
-    private Date createTime;
+    private Date createTime; // 创建订单时间
 
-    private Date updateTime;
+    private Date updateTime; // 更新订单时间
 
     public Order(Integer id, Long orderNo, Integer userId, Integer shippingId, BigDecimal payment, Integer paymentType, Integer postage, Integer status, Date paymentTime, Date sendTime, Date endTime, Date closeTime, Date createTime, Date updateTime) {
         this.id = id;
