@@ -49,6 +49,7 @@ public class CartServiceImpl implements ICartService {
             cartMapper.insert(item);
         } else {
             // 该产品已在购物车中，则更新产品数量=原来产品数量+count
+            // TODO 这里没有检验 产品 库存是否足够，而是放在下单购买时检验
             count = cart.getQuantity() + count;
             cart.setQuantity(count);
             cartMapper.updateByPrimaryKeySelective(cart);

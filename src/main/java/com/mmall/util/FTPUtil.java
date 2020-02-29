@@ -34,7 +34,7 @@ public class FTPUtil {
         FTPUtil ftpUtil = new FTPUtil(ftpIP, 21, ftpUser, ftpPass);
         logger.info("开始连接FTP服务器");
         boolean result = ftpUtil.uploadFile("img", fileList);
-        logger.info("文件上传结束，关闭FTP服务器，上传结果:{}");
+        logger.info("文件上传结束，关闭FTP服务器，上传地址，上传结果:{}", result);
         return result;
     }
 
@@ -61,6 +61,7 @@ public class FTPUtil {
                 assert stream != null;
                 stream.close();
                 ftpClient.disconnect();
+                logger.info("文件上传成功，关闭FTP服务器连接，上传地址：{}", remotePath);
             }
         }
         return uploaded;

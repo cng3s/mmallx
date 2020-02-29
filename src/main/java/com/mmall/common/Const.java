@@ -91,7 +91,7 @@ public class Const {
         }
 
         public static PaymentTypeEnum codeOf(int code) {
-            for (PaymentTypeEnum paymentTypeEnum : values()) {
+            for (PaymentTypeEnum paymentTypeEnum : PaymentTypeEnum.values()) {
                 if (paymentTypeEnum.getCode() == code) {
                     return paymentTypeEnum;
                 }

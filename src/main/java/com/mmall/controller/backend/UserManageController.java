@@ -18,11 +18,11 @@ public class UserManageController {
 
     @RequestMapping(value = "login.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<User> login(
-            String username, String passwd, HttpSession session) {
-        ServerResponse<User> response = iUserService.login(username, passwd);
-        if (!response.isSuccess())
+    public ServerResponse<User> login(String username, String password, HttpSession session) {
+        ServerResponse<User> response = iUserService.login(username, password);
+        if (!response.isSuccess()) {
             return response;
+        }
         User user = response.getData();
         if (user.getRole() == Const.Role.ROLE_ADMIN) {
             session.setAttribute(Const.CURRENT_USER, user);

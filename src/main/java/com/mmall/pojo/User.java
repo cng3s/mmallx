@@ -3,7 +3,7 @@ package com.mmall.pojo;
 import java.util.Date;
 
 public class User {
-    private Integer id;
+    private Integer id; // 用户id
 
     private String username;
 
@@ -13,11 +13,11 @@ public class User {
 
     private String phone;
 
-    private String question;
+    private String question; // 找回密码问题
 
-    private String answer;
+    private String answer; // 找回密码答案
 
-    private Integer role;
+    private Integer role; // 用户角色
 
     private Date createTime;
 

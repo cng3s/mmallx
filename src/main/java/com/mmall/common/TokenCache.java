@@ -14,6 +14,7 @@ public class TokenCache {
 
     public static final String TOKEN_PREFIX = "token_";
 
+    // 使用LRU算法
     private static LoadingCache<String, String> localCache =
             CacheBuilder.newBuilder().initialCapacity(1000).maximumSize(10000)
                     .expireAfterAccess(12, TimeUnit.HOURS)
@@ -30,11 +31,11 @@ public class TokenCache {
     }
 
     public static String getKey(String key) {
-        String val = null;
         try {
-            val = localCache.get(key);
-            if ("null".equals(val))
+            String val = localCache.get(key);
+            if ("null".equals(val)) {
                 return null;
+            }
             return val;
         } catch (Exception e) {
             logger.error("localCache get error", e);

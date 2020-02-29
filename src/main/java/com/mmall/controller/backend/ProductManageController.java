@@ -39,10 +39,12 @@ public class ProductManageController {
     @ResponseBody
     public ServerResponse<String> productSave(HttpSession session, Product product) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null)
+        if (user == null) {
             return ServerResponse.createByError("用户未登录");
-        if (iUserService.checkAdminRole(user).isSuccess())
+        }
+        if (iUserService.checkAdminRole(user).isSuccess()) {
             return iProductService.saveOrUpdateProduct(product);
+        }
         return ServerResponse.createByError("非管理员权限用户");
     }
 
@@ -51,10 +53,12 @@ public class ProductManageController {
     public ServerResponse<String> setSaleStatus(
             HttpSession session, Integer productId, Integer status) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null)
+        if (user == null) {
             return ServerResponse.createByError("用户未登录");
-        if (iUserService.checkAdminRole(user).isSuccess())
+        }
+        if (iUserService.checkAdminRole(user).isSuccess()) {
             return iProductService.setSaleStatus(productId, status);
+        }
         return ServerResponse.createByError("非管理员权限用户");
     }
 
@@ -62,10 +66,12 @@ public class ProductManageController {
     @ResponseBody
     public ServerResponse<?> getDetail(HttpSession session, Integer productId) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null)
+        if (user == null) {
             return ServerResponse.createByError("用户未登录");
-        if (iUserService.checkAdminRole(user).isSuccess())
+        }
+        if (iUserService.checkAdminRole(user).isSuccess()) {
             return iProductService.manageProductDetail(productId);
+        }
         return ServerResponse.createByError("非管理员权限用户");
     }
 
@@ -75,10 +81,13 @@ public class ProductManageController {
             , @RequestParam(value = "pageNum", defaultValue = "1") int pageNum
             , @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null)
+        if (user == null) {
             return ServerResponse.createByError("用户未登录");
-        if (iUserService.checkAdminRole(user).isSuccess())
+        }
+
+        if (iUserService.checkAdminRole(user).isSuccess()) {
             return iProductService.getProductList(pageNum, pageSize);
+        }
         return ServerResponse.createByError("非管理员权限用户");
     }
 
@@ -88,10 +97,13 @@ public class ProductManageController {
             , @RequestParam(value = "pageNum", defaultValue = "1") int pageNum
             , @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null)
+        if (user == null) {
             return ServerResponse.createByError("用户未登录");
-        if (iUserService.checkAdminRole(user).isSuccess())
+        }
+
+        if (iUserService.checkAdminRole(user).isSuccess()) {
             return iProductService.searchProduct(productName, productId, pageNum, pageSize);
+        }
         return ServerResponse.createByError("非管理员权限用户");
     }
 
@@ -102,15 +114,13 @@ public class ProductManageController {
             , HttpServletRequest request) {
         // 需判断上传用户的权限，防止未拥有权限用户上传超大文件占用硬盘空间
 
-        System.out.println("upload.do 1.开始准备上传文件");
-
         User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null)
+        if (user == null) {
             return ServerResponse.createByError(ResponseCode.NEED_LOGIN.getCode()
                     , "用户未登录，请登录管理员权限用户");
+        }
         if (iUserService.checkAdminRole(user).isSuccess()) {
 
-            System.out.println("upload.do 2.开始准备上传文件");
             String path = request.getSession().getServletContext().getRealPath("upload");
             String targetFileName = iFileService.upload(file, path);
             String url = PropertiesUtil.getProperty("ftp.server.http.prefix") + targetFileName;

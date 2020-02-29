@@ -23,6 +23,9 @@ public class ProductController {
         return iProductService.getProductDetail(productId);
     }
 
+    // @keyword: 关键字模糊查询
+    // @categoryId: 品类ID，即在该品类下查询 keyword
+    // @orderBy: 按价格 升/降序 排序 - 由PageHelper插件完成
     @RequestMapping("list.do")
     @ResponseBody
     public ServerResponse<PageInfo> list(

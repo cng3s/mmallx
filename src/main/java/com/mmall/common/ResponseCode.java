@@ -4,8 +4,9 @@ public enum ResponseCode {
 
     SUCCESS(0, "SUCCESS"),
     ERROR(1, "ERROR"),
+    ILLEGAL_ARGUMENT(2, "ILLEGAL_ARGUMENT"),
     NEED_LOGIN(10, "NEED_LOGIN"),
-    ILLEGAL_ARGUMENT(2, "ILLEGAL_ARGUMENT");
+    NEED_ADMIN(20, "NEED_ADMIN");
 
     private final int code; // 状态代码
     private final String desc; // 描述信息
