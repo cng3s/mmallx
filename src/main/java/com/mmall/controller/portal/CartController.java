@@ -107,7 +107,6 @@ public class CartController {
     @RequestMapping("un_select.do")
     @ResponseBody
     public ServerResponse<CartVo> unSelect(HttpSession session, Integer productId) {
-        System.out.println("Unselect is here");
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
             return ServerResponse.createByError(ResponseCode.NEED_LOGIN.getCode()

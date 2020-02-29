@@ -49,7 +49,8 @@ public class CartServiceImpl implements ICartService {
             cartMapper.insert(item);
         } else {
             // 该产品已在购物车中，则更新产品数量=原来产品数量+count
-            // TODO 这里没有检验 产品 库存是否足够，而是放在下单购买时检验
+            // TODO 如果库存是0的时候，则就无法添加到购物车中
+            // 这里如果产品库存不足，则购物车中的数量是库存的数量
             count = cart.getQuantity() + count;
             cart.setQuantity(count);
             cartMapper.updateByPrimaryKeySelective(cart);
@@ -91,7 +92,7 @@ public class CartServiceImpl implements ICartService {
     }
 
     public ServerResponse<Integer> getCartProductCount(Integer userId) {
-        // 这段老师代码中有，但是controller已经判断user != null，则这个应是多余的。
+        // controller已经判断user != null，则这个应是多余的。
 //        if (userId == null) {
 //            return ServerResponse.createBySuccess(0);
 //        }

@@ -61,7 +61,7 @@ public class FTPUtil {
                 assert stream != null;
                 stream.close();
                 ftpClient.disconnect();
-                logger.info("文件上传成功，关闭FTP服务器连接，上传地址：{}", remotePath);
+                logger.info("文件上传成功，关闭FTP服务器连接");
             }
         }
         return uploaded;

@@ -103,15 +103,14 @@ public class OrderController {
     public Object alipayCallback(HttpServletRequest request) {
         Map<String, String> params = Maps.newHashMap();
         Map requestParams = request.getParameterMap();
-        for (Iterator<?> iter = requestParams.keySet().iterator(); iter.hasNext(); ) {
-            String name = (String)iter.next();
-            String[] values = (String[]) iter.next();
-            String valueStr = "";
+        for (Object o : requestParams.keySet()) {
+            String name = (String) o;
+            String[] values = (String[]) requestParams.get(name);
+            String valStr = "";
             for (int i = 0; i < values.length; i++) {
-                valueStr = new StringBuilder().append(valueStr).append(values[i])
-                        .append((i == values.length - 1) ? "" : ",").toString();
+                valStr = (i == values.length-1) ? valStr + values[i] : valStr + values[i] + ",";
             }
-            params.put(name, valueStr);
+            params.put(name, valStr);
         }
         logger.info("支付宝回调: sign:{},trade_status:{},param:{}"
                 , params.get("sign"), params.get("trade_status"), params.toString());
@@ -124,7 +123,7 @@ public class OrderController {
                 return ServerResponse.createByError("非法请求，验证不通过。服务器已记录该请求。如果继续请求可能会交移网警处理。");
             }
         } catch (AlipayApiException e) {
-            e.printStackTrace();
+            logger.error("支付宝回调异常", e);
         }
 
         // TODO 验证各种数据

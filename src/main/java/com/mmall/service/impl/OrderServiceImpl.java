@@ -251,6 +251,7 @@ public class OrderServiceImpl implements IOrderService {
 
 
     public ServerResponse<?> aliCallback(Map<String, String> params) {
+
         Long orderNo = Long.parseLong(params.get("out_trade_no"));
         Order order = orderMapper.selectByOrderNo(orderNo);
         if (order == null) {
@@ -278,6 +279,7 @@ public class OrderServiceImpl implements IOrderService {
         payInfo.setPlatformStatus(tradeStatus);
 
         payInfoMapper.insert(payInfo);
+
         return ServerResponse.createBySuccess();
     }
 
@@ -292,6 +294,8 @@ public class OrderServiceImpl implements IOrderService {
         Order updateOrder = new Order();
         updateOrder.setId(order.getId());
         updateOrder.setStatus(Const.OrderStatusEnum.CANCELED.getCode());
+
+        // TODO BUG 订单取消后应该把物品归还到库存
 
         int rowCnt = orderMapper.updateByPrimaryKeySelective(updateOrder);
         if (rowCnt > 0) {
@@ -377,7 +381,7 @@ public class OrderServiceImpl implements IOrderService {
     public ServerResponse<?> pay(Long orderNo, Integer userId, String path) {
         Order order = orderMapper.selectByUserIdAndOrderNo(userId, orderNo);
         if (order == null) {
-            ServerResponse.createByError("用户没有该订单");
+            return ServerResponse.createByError("用户没有该订单");
         }
 
         Map<String, String> resultMap = Maps.newHashMap();
@@ -462,7 +466,6 @@ public class OrderServiceImpl implements IOrderService {
             String qrPath = String.format(path + "\\qr-%s.png", response.getOutTradeNo());
             String qrFileName = String.format("qr-%s.png", response.getOutTradeNo());
             ZxingUtils.getQRCodeImge(response.getQrCode(), 256, qrPath);
-
             File targetFile = new File(path, qrFileName);
             try {
                 FTPUtil.uploadFile(Lists.newArrayList(targetFile));
@@ -470,7 +473,7 @@ public class OrderServiceImpl implements IOrderService {
                 logger.error("上传文件异常");
             }
             logger.info("qrPath:" + qrPath);
-            String qrUrl = PropertiesUtil.getProperty("ftp.server.http.prefix") + targetFile.getName();
+            String qrUrl = PropertiesUtil.getProperty("ftp.server.http.prefix") + "upload/" + targetFile.getName();
             resultMap.put("qrUrl", qrUrl);
             return ServerResponse.createBySuccess(resultMap);
 
