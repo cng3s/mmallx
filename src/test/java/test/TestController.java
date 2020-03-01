@@ -2,6 +2,7 @@ package test;
 
 import com.mmall.common.TokenCache;
 import com.mmall.dao.UserMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +19,13 @@ import java.util.concurrent.ExecutionException;
 // 然后访问 网址(natapp提供的外网穿透的网址）/mmallx_war/test/test.do?str=value
 // 可以看到testValue:value
 
+@Slf4j
 @Controller
 @RequestMapping(value = "/test")
 public class TestController {
 
     @Autowired
     private UserMapper userMapper;
-
-    private static final Logger logger = LoggerFactory.getLogger(TestController.class);
 
     public static void main(String[] args) {
         Timestamp a = new Timestamp(System.currentTimeMillis());
@@ -43,9 +43,9 @@ public class TestController {
     @RequestMapping(value = "test.do")
     @ResponseBody
     public String test(String str) {
-        logger.info("testinfo");
-        logger.warn("testwarn");
-        logger.error("testerror");
+        log.info("testinfo");
+        log.warn("testwarn");
+        log.error("testerror");
         return "testValue:" + str;
     }
 }

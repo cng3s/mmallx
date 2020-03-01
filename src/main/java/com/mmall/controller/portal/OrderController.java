@@ -9,6 +9,7 @@ import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.service.IOrderService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +20,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Iterator;
 import java.util.Map;
 
+@Slf4j
 @Controller
 @RequestMapping("/order/")
 public class OrderController {
 
     @Autowired
     private IOrderService iOrderService;
-
-    private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     @RequestMapping("create.do")
     @ResponseBody
@@ -112,7 +111,7 @@ public class OrderController {
             }
             params.put(name, valStr);
         }
-        logger.info("支付宝回调: sign:{},trade_status:{},param:{}"
+        log.info("支付宝回调: sign:{},trade_status:{},param:{}"
                 , params.get("sign"), params.get("trade_status"), params.toString());
         // 非常重要，验证回调正确性，是不是支付宝发的信息，而且要避免重复通知
         params.remove("sign_type");
@@ -123,7 +122,7 @@ public class OrderController {
                 return ServerResponse.createByError("非法请求，验证不通过。服务器已记录该请求。如果继续请求可能会交移网警处理。");
             }
         } catch (AlipayApiException e) {
-            logger.error("支付宝回调异常", e);
+            log.error("支付宝回调异常", e);
         }
 
         // TODO 验证各种数据
