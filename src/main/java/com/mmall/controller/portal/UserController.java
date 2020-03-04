@@ -5,6 +5,8 @@ import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
+import com.mmall.util.JsonUtil;
+import com.mmall.util.RedisPoolUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +29,9 @@ public class UserController {
         // controller --> service --> mybatis --> dao
         ServerResponse<User> response = iUserService.login(username, password);
         if (response.isSuccess()) {
-            session.setAttribute(Const.CURRENT_USER, response.getData());
+            RedisPoolUtil.setEx(session.getId()
+                    , Const.RedisCacheExtime.REDIS_SESSION_EXTIME, JsonUtil.obj2String(response.getData()));
+
         }
         return response;
     }

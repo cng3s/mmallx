@@ -23,18 +23,24 @@ public class JsonUtil {
     static {
 
         // 对象的所有字段全部列入
+        // 如果设置成其他的，比如NOT_NULL，则是类成员不为空的时候才生成json相应字段
         objectMapper.setSerializationInclusion(JsonSerialize.Inclusion.ALWAYS);
 
-        // 取消默认转换timestamps形式
+        // 取消默认转换timestamps形式,时间戳即格林威治时间1970到现在的毫秒数。这玩意在很多领域可以当电子证据证明。
         objectMapper.configure(SerializationConfig.Feature.WRITE_DATE_KEYS_AS_TIMESTAMPS, false);
 
         // 忽略空Bean转json的错误
+        // 设成true的坑：空字符串转成json会出现异常，但如果设为false就转为了空json
         objectMapper.configure(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS, false);
 
         // 所有的日期格式都统一为以下的样式，即yyyy-MM-dd HH:mm:ss
+        // 不设置为STANDARD_FORMAT则就是关于时间的一串数字
         objectMapper.setDateFormat(new SimpleDateFormat(DateTimeUtil.STANDARD_FORMAT));
 
         // 忽略在json字符串中存在，但是在java对象中不存在对应属性的情况，防止错误。
+        // 设成true的坑：比如两个服务对接，其中一个服务有一天在类中加了两个字段，但我们这边没有这两个字段
+        // 此时将要设置为json的对象会变为 null ， 如果你没打日志，则很难发现问题。
+        // 但其实我们根本不关心这两个字段，所以设成false还是可以对接成功。即这两个字段不被生成而直接忽略。
         objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
@@ -88,6 +94,7 @@ public class JsonUtil {
             return null;
         }
         try {
+            // objectMapper.readValue(str, typeReference) 以 typeReference 类型来读取str内容
             return (T)(typeReference.getType().equals(String.class) ? str : objectMapper.readValue(str, typeReference));
         } catch (Exception e) {
             log.warn("Parse String to Object error", e);

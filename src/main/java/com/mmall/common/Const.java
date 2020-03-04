@@ -10,6 +10,11 @@ public class Const {
     public static final String USERNAME = "username";
     public static final String EMAIL = "email";
 
+    // Redis 键默认 TTL 时间
+    public interface RedisCacheExtime {
+        int REDIS_SESSION_EXTIME = 60*30; // ttl = 30min
+    }
+
     public interface ProductListOrderBy {
         Set<String> PRICE_ASC_DESC = Sets.newHashSet("price_desc", "price_asc");
     }
