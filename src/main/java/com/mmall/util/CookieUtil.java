@@ -10,7 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 public class CookieUtil {
 
-    private final static String COOKIE_DOMAIN = ".happymmall.com";
+    // 这里域名要写对了.例如: img.imooc11.com 和 www.imooc11.com 不是一个域名
+    // 则它们之间的cookie是不能互相使用的。
+    // 但是我们常看到的一个网站可能域名前缀互不相同，但cookie可以相互访问是为什么呢？
+    // 是因为它们之间cookie验证信息是使用一个共享的redis来存储的。
+    // 不同域名的tomcat上的程序都访问这个redis服务器，是用过软件方式实现共享。
+    private final static String COOKIE_DOMAIN = ".imooc11.com";
 
     private final static String COOKIE_NAME = "mmall_login_token";
 
@@ -32,6 +37,7 @@ public class CookieUtil {
         Cookie ck = new Cookie(COOKIE_NAME, token);
         ck.setDomain(COOKIE_DOMAIN);
         ck.setPath("/"); // 代表设置在根目录
+        ck.setHttpOnly(true);
 
         // 单位是秒
         // 如果这个maxage不设置的话，cookie就不会写入硬盘(向浏览器中写入cookie)，而是写在内存。只在当前页面有效。

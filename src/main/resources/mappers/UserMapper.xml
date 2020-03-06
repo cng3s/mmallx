@@ -160,9 +160,9 @@
     where email = #{email}
   </select>
 
+<!-- 注意：这里返回值是resultMap="BaseResultMap"，而该文件开头定义的BaseResultMap中存有User的字段信息-->
+<!-- 这里parameterType="map"，通过java.util.map将多个参数传入-->
     <select id="selectLogin" resultMap="BaseResultMap" parameterType="map">
-        -- 注意：这里返回值是resultMap="BaseResultMap"，而该文件开头定义的BaseResultMap中存有User的字段信息
-        -- 这里parameterType="map"，通过java.util.map将多个参数传入
         select
         <include refid="Base_Column_List"/>
         from mmall_user

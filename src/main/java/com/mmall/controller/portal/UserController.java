@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+@Slf4j
 @Controller
 @RequestMapping("/user/")
 public class UserController {
@@ -70,12 +71,17 @@ public class UserController {
     @RequestMapping(value = "get_user_info.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<User> getUserInfo(HttpServletRequest httpServletRequest) {
+
+
         String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        log.info("getUserInfo, loginToken: " + loginToken);
         if (StringUtils.isEmpty(loginToken)) {
             return ServerResponse.createByError("用户未登录，无法获取当前用户信息");
         }
         String userJsonStr = RedisPoolUtil.get(loginToken);
+        log.info("getUserInfo, userJsonStr: " + userJsonStr);
         User user = JsonUtil.string2Obj(userJsonStr, User.class);
+        log.info("getUserInfo, user: " + user);
         if (user != null) {
             return ServerResponse.createBySuccess(user);
         }

@@ -4,7 +4,6 @@ import com.mmall.common.RedisPool;
 import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
 
-import java.io.IOException;
 
 @Slf4j
 public class RedisPoolUtil {
@@ -19,7 +18,7 @@ public class RedisPoolUtil {
             result = jedis.set(key,value);
         } catch (Exception e) {
             // 也可使用e.getMessage()，但这个只提供错误位置，错误信息提供得很少
-            // 所以这里直接使用 e 打印具体信息
+            // 所以这里直接使用 e 打印堆栈具体信息
             log.error("set key: {}, value {}, error {}", key, value, e);
             RedisPool.returnBrokenResource(jedis);
             return result;
