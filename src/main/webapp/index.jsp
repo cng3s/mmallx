@@ -2,6 +2,8 @@
 <html>
 <body>
 <h2>Hello World!</h2>
+<h2>tomcat1</h2>
+<h2>tomcat1</h2>
 
 SpringMVC上传文件
 <form name="form1" action="/mmallx_war/manage/product/upload.do" method="post" enctype="multipart/form-data">

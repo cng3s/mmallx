@@ -1,18 +1,24 @@
 package com.mmall.controller.portal;
 
 import com.mmall.common.Const;
+import com.mmall.common.RedisPool;
 import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
+import com.mmall.util.CookieUtil;
 import com.mmall.util.JsonUtil;
 import com.mmall.util.RedisPoolUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -25,22 +31,27 @@ public class UserController {
 
     @RequestMapping(value = "login.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<User> login(String username, String password, HttpSession session) {
+    public ServerResponse<User> login(String username, String password, HttpSession session
+            , HttpServletResponse httpServletResponse) {
         // controller --> service --> mybatis --> dao
         ServerResponse<User> response = iUserService.login(username, password);
         if (response.isSuccess()) {
+            // 将LoginToken写入浏览器中，这样相同浏览器相同http header不同标签页访问一个网站就不会出现重复登录的情况
+            // 即浏览器为我们保存了cookie信息 ( 注：cookie是保存在客户端的会话状态，session是保存在服务器端的会话状态 )
+            CookieUtil.writeLoginToken(httpServletResponse, session.getId());
             RedisPoolUtil.setEx(session.getId()
                     , Const.RedisCacheExtime.REDIS_SESSION_EXTIME, JsonUtil.obj2String(response.getData()));
-
         }
         return response;
     }
 
     @RequestMapping(value = "logout.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<User> logout(HttpSession session) {
-        session.removeAttribute(Const.CURRENT_USER);
-        return ServerResponse.createBySuccess("注销成功");
+    public ServerResponse<User> logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        CookieUtil.delLoginToken(httpServletRequest, httpServletResponse);
+        RedisPoolUtil.del(loginToken);
+        return ServerResponse.createBySuccess();
     }
 
     @RequestMapping(value = "register.do", method = RequestMethod.POST)
@@ -58,14 +69,17 @@ public class UserController {
 
     @RequestMapping(value = "get_user_info.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<User> getUserInfo(HttpSession session) {
-        // 为什么通过CURRENT_USER属性就能获取User对象信息？
-        // 因为login里session中设置为Const.CURRENT_USER，所以通过session的getAttribute方法可以获取
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return ServerResponse.createByError("用户未登录");
+    public ServerResponse<User> getUserInfo(HttpServletRequest httpServletRequest) {
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (StringUtils.isEmpty(loginToken)) {
+            return ServerResponse.createByError("用户未登录，无法获取当前用户信息");
         }
-        return ServerResponse.createBySuccess(user);
+        String userJsonStr = RedisPoolUtil.get(loginToken);
+        User user = JsonUtil.string2Obj(userJsonStr, User.class);
+        if (user != null) {
+            return ServerResponse.createBySuccess(user);
+        }
+        return ServerResponse.createByError("用户未登录，无法获取当前用户信息");
     }
 
     @RequestMapping(value = "forget_get_question.do", method = RequestMethod.POST)
