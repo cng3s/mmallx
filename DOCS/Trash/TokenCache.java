@@ -9,6 +9,11 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 
+// TokenCache 被 RedisPool 代替
+// 原因是因为多tomcat环境下无法使用 TokenCache
+// TokenCache只能保存该tomcat下的token cache信息
+// 而其他的tomcat服务器不能访问到这个 tomcat 下 token cache信息
+// 所以使用 redis 服务器作为新的 token cache
 @Slf4j
 public class TokenCache {
 

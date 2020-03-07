@@ -10,6 +10,8 @@ public class Const {
     public static final String USERNAME = "username";
     public static final String EMAIL = "email";
 
+    public static final String TOKEN_PREFIX = "token_";
+
     // Redis 键默认 TTL 时间
     public interface RedisCacheExtime {
         int REDIS_SESSION_EXTIME = 60*30; // ttl = 30min

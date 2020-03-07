@@ -1,7 +1,6 @@
 package com.mmall.controller.common;
 
 import com.mmall.common.Const;
-import com.mmall.common.RedisPool;
 import com.mmall.pojo.User;
 import com.mmall.util.CookieUtil;
 import com.mmall.util.JsonUtil;
@@ -15,7 +14,6 @@ import java.io.IOException;
 // Filter类是拦截器，用于拦截所有定义中匹配到的规则的请求
 // 而该定义是写在web.xml下的sessionExpireFilter
 // 拦截后强制先执行该类中的(doFilter)方法，然后在执行后面的请求操作
-
 public class SessionExpireFilter implements Filter {
 
     @Override

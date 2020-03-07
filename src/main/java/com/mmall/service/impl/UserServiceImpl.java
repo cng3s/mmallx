@@ -2,11 +2,11 @@ package com.mmall.service.impl;
 
 import com.mmall.common.Const;
 import com.mmall.common.ServerResponse;
-import com.mmall.common.TokenCache;
 import com.mmall.dao.UserMapper;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
 import com.mmall.util.MD5Util;
+import com.mmall.util.RedisPoolUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,8 +22,9 @@ public class UserServiceImpl implements IUserService {
     @Override
     public ServerResponse<User> login(String username, String password) {
         int result_cnt = userMapper.checkUsername(username);
-        if (result_cnt == 0)
+        if (result_cnt == 0) {
             return ServerResponse.createByError("用户名不存在");
+        }
 
         String md5Password = MD5Util.MD5EncodeUtf8(password);
         User user = userMapper.selectLogin(username, md5Password);
@@ -37,16 +38,19 @@ public class UserServiceImpl implements IUserService {
     // 普通用户注册
     @Override
     public ServerResponse<String> register(User user) {
+
         // TODO 检测用户名的合法性
         ServerResponse<String> check_res = this.checkValid(user.getUsername(), Const.USERNAME);
         if (!check_res.isSuccess()) {
             return check_res;
         }
+
         // TODO 检验电子邮箱的合法性
         check_res = this.checkValid(user.getEmail(), Const.EMAIL);
         if (!check_res.isSuccess()) {
             return check_res;
         }
+
         user.setRole(Const.Role.ROLE_CUSTOMER);
         String md5_password = MD5Util.MD5EncodeUtf8(user.getPassword());
         user.setPassword(md5_password);
@@ -99,11 +103,12 @@ public class UserServiceImpl implements IUserService {
 
         // 使用UUID生成重复概率极小的字符串作为token令牌并存储缓存池,防止横向越权的关键
         String forget_tok = UUID.randomUUID().toString();
-        TokenCache.setKey(TokenCache.TOKEN_PREFIX + username, forget_tok);
+        RedisPoolUtil.setEx(Const.TOKEN_PREFIX+username, 60*60*12, forget_tok);
         return ServerResponse.createBySuccess(forget_tok);
     }
 
     public ServerResponse<String> forgetResetPassword(String username, String newpasswd, String tok) {
+
         if (StringUtils.isBlank(tok)) {
             return ServerResponse.createByError("参数错误，token需要传递");
         }
@@ -111,7 +116,8 @@ public class UserServiceImpl implements IUserService {
         if (check.isSuccess()) {
             return ServerResponse.createByError("用户不存在");
         }
-        String currentToken = TokenCache.getKey(TokenCache.TOKEN_PREFIX + username);
+
+        String currentToken = RedisPoolUtil.get(Const.TOKEN_PREFIX+username);
         if (StringUtils.isBlank(currentToken)) {
             return ServerResponse.createByError("token无效或过期");
         }

@@ -102,8 +102,13 @@ public class RedisPoolUtil {
         RedisPoolUtil.set("keyTest", "valueTest11988");
         String value = RedisPoolUtil.get("keyTest");
         System.out.println(value);
-        RedisPoolUtil.setEx("keyex", 60*10, "valueex"); // set ttl 10min
-        RedisPoolUtil.expire("keyTest",60*20); // set ttl 20min
+        String resultstr = RedisPoolUtil.setEx("keyex", 60*10, "valueex"); // set ttl 10min
+        System.out.println(resultstr);
+        Long result = RedisPoolUtil.expire("keyTest",60*20); // set ttl 20min
+        System.out.println(result);
+        result = del("keyTest"); // del keyTest
+        System.out.println(result);
+
 
         System.out.println("end");
     }

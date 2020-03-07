@@ -113,28 +113,45 @@ public class UserController {
     @RequestMapping(value = "reset_password.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> resetPassword(
-            HttpSession session, String oldPassword, String newPassword) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null)
+            HttpServletRequest httpServletRequest, String oldPassword, String newPassword) {
+
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (StringUtils.isEmpty(loginToken)) {
+            return ServerResponse.createByError("用户未登录，无法获取当前用户信息");
+        }
+
+        String userJsonStr = RedisPoolUtil.get(loginToken);
+        User user = JsonUtil.string2Obj(userJsonStr, User.class);
+        if (user == null) {
             return ServerResponse.createByError("用户未登录");
+        }
         return iUserService.resetPassword(oldPassword, newPassword, user);
     }
 
     @RequestMapping(value = "update_information.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<User> update_information(HttpSession session, User user) {
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return ServerResponse.createByError("用户未登录");
+    public ServerResponse<User> update_information(HttpServletRequest httpServletRequest, User user) {
+
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (StringUtils.isEmpty(loginToken)) {
+            return ServerResponse.createByError("用户未登录，无法获取当前用户信息");
         }
+
+        String userJsonStr = RedisPoolUtil.get(loginToken);
+        User currentUser = JsonUtil.string2Obj(userJsonStr, User.class);
+        if (currentUser == null) {
+            return ServerResponse.createByError("用户未登录，无法获取当前用户信息");
+        }
+
+        // 用户不能改变其用户ID和用户名，所以更新时前端不需要传递这两个参数信息，而是靠后端给予
         user.setId(currentUser.getId());
+        user.setUsername(currentUser.getUsername());
         ServerResponse<User> response = iUserService.updateInformation(user);
         if (response.isSuccess()) {
-            // 用户不能改变其用户ID和用户名，所以更新时前端不需要传递这两个参数信息，而是靠后端给予
-            User updatedUser = response.getData();
-            updatedUser.setUsername(currentUser.getUsername());
+            response.getData().setUsername(currentUser.getUsername());
             // 如果更新成功，只需要把session中CURRENT_USER域设置为更新用户信息
-            session.setAttribute(Const.CURRENT_USER, response.getData());
+            RedisPoolUtil.setEx(
+                    loginToken, Const.RedisCacheExtime.REDIS_SESSION_EXTIME, JsonUtil.obj2String(response.getData()));
         }
         return response;
     }
@@ -143,11 +160,17 @@ public class UserController {
     // 当前端获取ResponseCode.NEED_LOGIN时跳转到登录页面
     @RequestMapping(value = "get_information.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<User> get_information(HttpSession session) {
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return ServerResponse.createByError(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+    public ServerResponse<User> get_information(HttpServletRequest httpServletRequest) {
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (StringUtils.isEmpty(loginToken)) {
+            return ServerResponse.createByError("用户未登录，无法获取当前用户信息");
         }
-        return iUserService.getInformation(currentUser.getId());
+
+        String userJsonStr = RedisPoolUtil.get(loginToken);
+        User user = JsonUtil.string2Obj(userJsonStr, User.class);
+        if (user == null) {
+            return ServerResponse.createByError("用户未登录，无法获取当前用户信息");
+        }
+        return iUserService.getInformation(user.getId());
     }
 }
