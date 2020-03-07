@@ -161,3 +161,5 @@ nginx-1.10.2
 ## SessionExpireFilter重置session有效期
 ## Redis对接用户session相关的模块
 ## Guava cache迁移到Redis缓存
+## Redis分布式及保证分布式一致性
+## SpringMVC全局异常处理

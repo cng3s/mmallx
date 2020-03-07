@@ -18,6 +18,10 @@ nginx-1.10.2
 * TokenCache Token令牌缓存类
   * 存放UUID生成的token令牌
   * 防止横向越权的行为发生
+* RedisPool
+  * 存放Redis连接
+  * 可以快速创建/释放连接，减少开销
+* 测试通用模块
 
 ## 用户模块
 * 功能
@@ -32,6 +36,7 @@ nginx-1.10.2
   * Guava缓存的使用
   * 高复用服务响应对象的设计思想及抽象封装
   * Mybatis-plugin使用
+* 测试用户模块
 
 ## 分类管理模块
 * 功能
@@ -42,6 +47,7 @@ nginx-1.10.2
   * 递归算法的设计思想
   * 如何处理复杂对象排重
   * 重写 hashcode 和 equals 的注意事项
+* 测试分类管理模块
 
 ## 商品模块
 * 功能
@@ -61,6 +67,7 @@ nginx-1.10.2
   * Mybatis-PageHelper高效准确地分页及动态排序
   * Mybatis对List遍历的实现方法
   * Mybatis对where语句的动态拼装的几个版本的演变
+* 测试商品模块
 
 ## 购物车模块
 * 功能
@@ -71,6 +78,7 @@ nginx-1.10.2
   * 购物车模块的设计思想
   * 如何封装一个高服用购物车核心方法
   * 浮点型商业运算中丢失精度的问题
+* 测试商品模块
 
 ## 收货地址模块
 * 功能
@@ -80,6 +88,7 @@ nginx-1.10.2
   * SpringMVC数据绑定中对象绑定
   * mybatis自动生成主键、配置和使用
   * 如何避免横向越权漏洞
+* 测试收获地址模块
 
 ## 支付模块
 * 功能
@@ -100,6 +109,8 @@ nginx-1.10.2
   * 避免支付宝重复通知和数据校验
   * natapp外网穿透 和 tomcat remote debug
   * 生成二维码，并持久化到图片服务器
+* 测试支付模块
+  * 支付宝沙箱支付对接
 
 ## 订单模块
 * 功能
@@ -115,6 +126,7 @@ nginx-1.10.2
   * 订单号生成规则、订单严谨性判断
   * POJO 和 VO 之间的实际操练
   * mybatis批量插入
+* 测试订单模块
 
 ## 辅助工具模块
 * MD5 加密模块
@@ -130,11 +142,37 @@ nginx-1.10.2
 * BigDecimalUtil 商业BigDecimal数学精确计算类
   * BigDecimalUtil统一采用String类型构造器进行初始化
   * 避免因小数计算精度问题而导致支付宝对账失败
+* RedisPoolUtil
+  * Redis连接池，管理Jedis连接
+* 辅助工具模块测试
 
 # v2.x - 施工完成的部分
 ## Lombok导入
 ## Maven快速部署
-## 集成Redis客户端Jedis
-## Redis连接池构建和测试
 ## Nginx + Tomcat集群
-## 
+## 集成Redis客户端Jedis
+* Jedis API封装
+## Redis连接池管理Jedis连接
+* RedisPool
+* RedisPoolUtil
+## Jackson封装JsonUtil及调试
+* Jackson ObjectMapper源码
+## Cookie池封装
+## SessionExpireFilter重置session有效期
+## Redis对接用户session相关的模块
+## Guava cache迁移到Redis缓存
+
+# 待施工
+## Redis分布式
+要点：
+* Redis分布式算法原理
+    * 传统分布式算法
+    * Consistent hashing一致性算法原理
+    * Hash倾斜性
+    * 虚拟节点
+    * Consistent hashing命中率
+* 分布式环境配置
+* 分布式服务端及客户端启动
+* 封装分布式Shard Redis API
+* Redis分布式环境验证
+* 集群和分布式区别
