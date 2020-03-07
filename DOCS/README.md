@@ -161,8 +161,6 @@ nginx-1.10.2
 ## SessionExpireFilter重置session有效期
 ## Redis对接用户session相关的模块
 ## Guava cache迁移到Redis缓存
-
-# 待施工
 ## Redis分布式
 要点：
 * Redis分布式算法原理
@@ -176,3 +174,19 @@ nginx-1.10.2
 * 封装分布式Shard Redis API
 * Redis分布式环境验证
 * 集群和分布式区别
+## Spring Session项目集成
+* 引入Spring Session pom
+* 配置JedisConnectionFactory
+* 配置DelegatingFilterProxy
+* 配置RedisHttpSessionConfiguration
+* 配置DefaultCookieSerializer
+* 配置JedisPoolConfig
+* 阅读源码
+    * DelegatingFilterProxy
+    * DefaultCookieSerializer
+    * SessionRepositoryFilter
+    * RedisOperationsSessionRepository
+    * AbstractHttpSessionApplicationInitializer
+    * SessionRepositoryRequestWrapper
+    * SessionRepositoryResponseWrapper
+    * CookieHttpSessionStrategy
