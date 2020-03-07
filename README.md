@@ -149,5 +149,15 @@ nginx-1.10.2
 # v2.x - 施工完成的部分
 ## Lombok导入
 ## Maven快速部署
-## Redis连接池管理Jedis连接
 ## Nginx + Tomcat集群
+## 集成Redis客户端Jedis
+* Jedis API封装
+## Redis连接池管理Jedis连接
+* RedisPool
+* RedisPoolUtil
+## Jackson封装JsonUtil及调试
+* Jackson ObjectMapper源码
+## Cookie池封装
+## SessionExpireFilter重置session有效期
+## Redis对接用户session相关的模块
+## Guava cache迁移到Redis缓存

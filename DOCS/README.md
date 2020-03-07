@@ -134,5 +134,7 @@ nginx-1.10.2
 # v2.x - 施工完成的部分
 ## Lombok导入
 ## Maven快速部署
-## Redis连接池
+## 集成Redis客户端Jedis
+## Redis连接池构建和测试
 ## Nginx + Tomcat集群
+## 
