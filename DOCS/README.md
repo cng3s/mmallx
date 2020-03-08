@@ -147,49 +147,52 @@ nginx-1.10.2
 * 辅助工具模块测试
 
 # v2.x - 施工完成的部分
-## Lombok导入
-## Maven快速部署
-## Nginx + Tomcat集群
-## 集成Redis客户端Jedis
-* Jedis API封装
-## Redis连接池管理Jedis连接
-* RedisPool
-* RedisPoolUtil
-## Jackson封装JsonUtil及调试
-* Jackson ObjectMapper源码
-## Cookie池封装
-## SessionExpireFilter重置session有效期
-## Redis对接用户session相关的模块
-## Guava cache迁移到Redis缓存
-## Redis分布式
-要点：
-* Redis分布式算法原理
-    * 传统分布式算法
-    * Consistent hashing一致性算法原理
-    * Hash倾斜性
-    * 虚拟节点
-    * Consistent hashing命中率
-* 分布式环境配置
-* 分布式服务端及客户端启动
-* 封装分布式Shard Redis API
-* Redis分布式环境验证
-* 集群和分布式区别
-## Spring Session项目集成
-* 引入Spring Session pom
-* 配置JedisConnectionFactory
-* 配置DelegatingFilterProxy
-* 配置RedisHttpSessionConfiguration
-* 配置DefaultCookieSerializer
-* 配置JedisPoolConfig
-* 阅读源码
-    * DelegatingFilterProxy
-    * DefaultCookieSerializer
-    * SessionRepositoryFilter
-    * RedisOperationsSessionRepository
-    * AbstractHttpSessionApplicationInitializer
-    * SessionRepositoryRequestWrapper
-    * SessionRepositoryResponseWrapper
-    * CookieHttpSessionStrategy
-## SpringMVC 全局异常
-* 统一包装并处理异常，防止泄露代码中地细节，保证软件安全性
-* 使用@Component注解
+# v2.0
+* Lombok导入
+* Maven快速部署
+* Nginx + Tomcat集群
+* 集成Redis客户端Jedis
+    * Jedis API封装
+* Redis连接池管理Jedis连接
+    * RedisPool
+    * RedisPoolUtil
+* Jackson封装JsonUtil及调试
+    * Jackson ObjectMapper源码
+* Cookie池封装
+* SessionExpireFilter重置session有效期
+* Redis对接用户session相关的模块
+* Guava cache迁移到Redis缓存
+* Redis分布式
+    *要点：
+        * Redis分布式算法原理
+        * 传统分布式算法
+        * Consistent hashing一致性算法原理
+        * Hash倾斜性
+        * 虚拟节点
+        * Consistent hashing命中率
+        * MURMUR_HASH
+    * 分布式环境配置
+    * 分布式服务端及客户端启动
+    * 封装分布式Shard Redis API
+    * Redis分布式环境验证
+    * 集群和分布式区别
+* Spring Session项目集成
+    * 引入Spring Session pom
+    * 配置JedisConnectionFactory
+    * 配置DelegatingFilterProxy
+    * 配置RedisHttpSessionConfiguration
+    * 配置DefaultCookieSerializer
+    * 配置JedisPoolConfig
+    * 阅读源码
+        * DelegatingFilterProxy
+        * DefaultCookieSerializer
+        * SessionRepositoryFilter
+        * RedisOperationsSessionRepository
+        * AbstractHttpSessionApplicationInitializer
+        * SessionRepositoryRequestWrapper
+        * SessionRepositoryResponseWrapper
+        * CookieHttpSessionStrategy
+## v2.1
+* SpringMVC 全局异常
+    * 统一包装并处理异常，防止泄露代码中地细节，保证软件安全性
+    * 使用@Component注解
