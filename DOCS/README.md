@@ -190,3 +190,6 @@ nginx-1.10.2
     * SessionRepositoryRequestWrapper
     * SessionRepositoryResponseWrapper
     * CookieHttpSessionStrategy
+## SpringMVC 全局异常
+* 统一包装并处理异常，防止泄露代码中地细节，保证软件安全性
+* 使用@Component注解
