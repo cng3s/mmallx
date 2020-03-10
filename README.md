@@ -147,19 +147,52 @@ nginx-1.10.2
 * 辅助工具模块测试
 
 # v2.x - 施工完成的部分
-## Lombok导入
-## Maven快速部署
-## Nginx + Tomcat集群
-## 集成Redis客户端Jedis
-* Jedis API封装
-## Redis连接池管理Jedis连接
-* RedisPool
-* RedisPoolUtil
-## Jackson封装JsonUtil及调试
-* Jackson ObjectMapper源码
-## Cookie池封装
-## SessionExpireFilter重置session有效期
-## Redis对接用户session相关的模块
-## Guava cache迁移到Redis缓存
-## Redis分布式及保证分布式一致性
-## SpringMVC全局异常处理
+## v2.0
+* Lombok导入
+* Maven快速部署
+* Nginx + Tomcat集群
+* 集成Redis客户端Jedis
+    * Jedis API封装
+* Redis连接池管理Jedis连接
+    * RedisPool
+    * RedisPoolUtil
+* Jackson封装JsonUtil及调试
+    * Jackson ObjectMapper源码
+* Cookie池封装
+* SessionExpireFilter重置session有效期
+* Redis对接用户session相关的模块
+* Guava cache迁移到Redis缓存
+* Redis分布式及保证分布式一致性
+    * 分布式环境配置
+    * 分布式服务端及客户端启动
+    * 封装分布式Shard Redis API
+    * Redis分布式环境验证
+    * 集群和分布式区别
+* SpringMVC全局异常处理
+
+## v2.1
+* SpringMVC 全局异常
+    * 统一包装并处理异常，防止泄露代码中地细节，保证软件安全性
+    * 使用@Component注解
+* SpringMVC 拦截器
+    * 重置HttpServletResponse
+    * 拦截登录循环问题
+    * 富文本上传拦截器处理及自测
+    * 配置请求的时候，如果只要匹配某个controller，就使用controller/*.do。
+    * 而如果要匹配该controller和子controller的请求，就要用controller1/**.do
+    * 比如： manage/login.do -> manage/*.do; manage/product/add.do -> manage/**.do
+    * HandlerInterceptor(preHandle(), postHandle(), afterCompletion())
+    * 路径设置：
+        * <mvc:mapping path="" />
+        * /** 所有路径及里面的子路径
+        * /* 当面路径下的所有路径，不含子文件夹
+        * / web项目的根目录请求
+    * <mvc:interceptors>
+    * <mvc:interceptor>
+    * <mvc:exclude-mapping path="" />
+* Spring Schedule
+    * Spring Schedule使用/配置
+    * Spring Schedule Cron 生成器
+    * Mysql 行锁和表锁
+        * SELECT ... FOR UPDATE - 悲观锁 -> 以后要改进为乐观锁
+    
