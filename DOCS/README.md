@@ -183,7 +183,7 @@ nginx-1.10.2
     * 配置RedisHttpSessionConfiguration
     * 配置DefaultCookieSerializer
     * 配置JedisPoolConfig
-    * 阅读源码
+    * 源码
         * DelegatingFilterProxy
         * DefaultCookieSerializer
         * SessionRepositoryFilter
@@ -193,10 +193,10 @@ nginx-1.10.2
         * SessionRepositoryResponseWrapper
         * CookieHttpSessionStrategy
 ## v2.1
-* SpringMVC 全局异常
+### SpringMVC 全局异常
     * 统一包装并处理异常，防止泄露代码中地细节，保证软件安全性
     * 使用@Component注解
-* SpringMVC 拦截器
+### SpringMVC 拦截器
     * 重置HttpServletResponse
     * 拦截登录循环问题
     * 富文本上传拦截器处理及自测
@@ -212,3 +212,23 @@ nginx-1.10.2
     * <mvc:interceptors>
     * <mvc:interceptor>
     * <mvc:exclude-mapping path="" />
+### Spring Schedule
+* 什么是Spring Schedule - 用于作业调度，如定时任务的框架
+* Spring Schedule使用/配置
+* Spring Schedule Cron 表达式-s:m:h:d:month:week:year
+* Spring Schedule Cron 生成器
+* Mysql 行锁和表锁
+    * SELECT ... FOR UPDATE - 悲观锁 -> 以后要改进为乐观锁
+    * 使用InnoDB引擎
+    * Row-Level Lock(明确的主键)
+    * Table-Level Lock(无明确的主键)
+    * mmall_product表，有id和name，id是主键
+    * 明确指定主键，并且有结果集，Row-Level Lock
+        * SELECT * FROM mmall_product WHERE id=' 66' FOR UPDATE;
+    * 明确指定主键，并且无结果集，无Lock
+        * SELECT * FROM mmall_product WHERE id=' -100' FOR UPDATE;
+    * 无主键 Table-Level Lock
+        * SELECT * FROM mmall_product WHERE name='iphone' FOR UPDATE;
+    * 主键不明确 Table-Level Lock
+        * SELECT * FROM mmall_product WHERE id <> ' 66' FOR UPDATE;
+        * SELECT * FROM mmall_product WHERE id LIKE '66' FOR UPDATE;

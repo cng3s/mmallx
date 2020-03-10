@@ -225,4 +225,23 @@
         from mmall_order
         order by create_time desc
     </select>
+
+    <!--  <![CDATA[ expression ]]> 如果expression中含有需要转义的字符，使用CDATA就可以不需要转义  -->
+    <!--  这里语句中 <= 需要转义，所以使用CDATA  -->
+    <select id="selectOrderStatusByCreateTime" resultMap="BaseResultMap" parameterType="map">
+        SELECT
+        <include refid="Base_Column_List" />
+        from mmall_order
+        where status = #{status}
+        <![CDATA[
+        and create_time <= #{date}
+        ]]>
+        order by create_time desc
+    </select>
+
+    <update id="closeOrderByOrderId" parameterType="int">
+        UPDATE mmall_order
+        SET status=0
+        WHERE id=#{id}
+    </update>
 </mapper>
