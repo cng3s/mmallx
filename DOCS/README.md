@@ -196,3 +196,19 @@ nginx-1.10.2
 * SpringMVC 全局异常
     * 统一包装并处理异常，防止泄露代码中地细节，保证软件安全性
     * 使用@Component注解
+* SpringMVC 拦截器
+    * 重置HttpServletResponse
+    * 拦截登录循环问题
+    * 富文本上传拦截器处理及自测
+    * 配置请求的时候，如果只要匹配某个controller，就使用controller/*.do。
+    * 而如果要匹配该controller和子controller的请求，就要用controller1/**.do
+    * 比如： manage/login.do -> manage/*.do; manage/product/add.do -> manage/**.do
+    * HandlerInterceptor(preHandle(), postHandle(), afterCompletion())
+    * 路径设置：
+        * <mvc:mapping path="" />
+        * /** 所有路径及里面的子路径
+        * /* 当面路径下的所有路径，不含子文件夹
+        * / web项目的根目录请求
+    * <mvc:interceptors>
+    * <mvc:interceptor>
+    * <mvc:exclude-mapping path="" />

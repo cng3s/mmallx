@@ -30,27 +30,32 @@ public class OrderManageController {
     public ServerResponse<PageInfo> orderList(HttpSession session
             , @RequestParam(value = "pageNum", defaultValue = "1") int pageNum
             , @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return ServerResponse.createByError("用户未登录");
-        }
-        if (iUserService.checkAdminRole(user).isSuccess()) {
-            return iOrderService.manageList(pageNum, pageSize);
-        }
-        return ServerResponse.createByError("非管理员权限用户，无权限操作");
+//        User user = (User)session.getAttribute(Const.CURRENT_USER);
+//        if (user == null) {
+//            return ServerResponse.createByError("用户未登录");
+//        }
+//        if (iUserService.checkAdminRole(user).isSuccess()) {
+//            return iOrderService.manageList(pageNum, pageSize);
+//        }
+//        return ServerResponse.createByError("非管理员权限用户，无权限操作");
+
+        // 统一由拦截器处理
+        return iOrderService.manageList(pageNum, pageSize);
     }
 
     @RequestMapping("detail.do")
     @ResponseBody
     public ServerResponse<OrderVo> orderDetail(HttpSession session, Long orderNo) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return ServerResponse.createByError("用户未登录");
-        }
-        if (iUserService.checkAdminRole(user).isSuccess()) {
-            return iOrderService.manageDetail(orderNo);
-        }
-        return ServerResponse.createByError("非管理员权限用户，无权限操作");
+//        User user = (User) session.getAttribute(Const.CURRENT_USER);
+//        if (user == null) {
+//            return ServerResponse.createByError("用户未登录");
+//        }
+//        if (iUserService.checkAdminRole(user).isSuccess()) {
+//            return iOrderService.manageDetail(orderNo);
+//        }
+//        return ServerResponse.createByError("非管理员权限用户，无权限操作");
+        // 统一由拦截器处理
+        return iOrderService.manageDetail(orderNo);
     }
 
     @RequestMapping("search.do")
@@ -58,26 +63,29 @@ public class OrderManageController {
     public ServerResponse<PageInfo> orderSearch(HttpSession session, Long orderNo
             , @RequestParam(value = "pageNum", defaultValue = "1") int pageNum
             , @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return ServerResponse.createByError("用户未登录");
-        }
-        if (iUserService.checkAdminRole(user).isSuccess()) {
-            return iOrderService.manageSearch(orderNo, pageNum, pageSize);
-        }
-        return ServerResponse.createByError("非管理员权限用户，无权限操作");
+//        User user = (User) session.getAttribute(Const.CURRENT_USER);
+//        if (user == null) {
+//            return ServerResponse.createByError("用户未登录");
+//        }
+//        if (iUserService.checkAdminRole(user).isSuccess()) {
+//            return iOrderService.manageSearch(orderNo, pageNum, pageSize);
+//        }
+//        return ServerResponse.createByError("非管理员权限用户，无权限操作");
+        // 统一由拦截器处理
+        return iOrderService.manageSearch(orderNo, pageNum, pageSize);
     }
 
     @RequestMapping("send_goods.do")
     @ResponseBody
     public ServerResponse<String> orderSendGoods(HttpSession session, Long orderNo) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return ServerResponse.createByError("用户未登录");
-        }
-        if (iUserService.checkAdminRole(user).isSuccess()) {
-            return iOrderService.manageSendGoods(orderNo);
-        }
-        return ServerResponse.createByError("非管理员权限用户，无权限操作");
+//        User user = (User) session.getAttribute(Const.CURRENT_USER);
+//        if (user == null) {
+//            return ServerResponse.createByError("用户未登录");
+//        }
+//        if (iUserService.checkAdminRole(user).isSuccess()) {
+//            return iOrderService.manageSendGoods(orderNo);
+//        }
+//        return ServerResponse.createByError("非管理员权限用户，无权限操作");
+        return iOrderService.manageSendGoods(orderNo);
     }
 }
