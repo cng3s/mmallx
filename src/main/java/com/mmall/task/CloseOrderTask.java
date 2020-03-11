@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PreDestroy;
 
 // Spring Schedule 实现定时关单任务
+// PS: 很多错误实现例子存在这里
 @Component
 @Slf4j
 public class CloseOrderTask {
@@ -39,8 +40,9 @@ public class CloseOrderTask {
         log.info("关闭订单定时任务结束");
     }
 
-    // TODO: 这段代码有一个严重的问题，即当程序直接关闭的情况下，如果没有走完closeOrder函数，则redis分布式锁根本不会被释放，相当于彻底锁死了
-    // 折中方案，delLock()函数。
+    // 这段代码有严重的问题，如果程序在执行完 setnx 之后突然崩溃，导致锁没有设置过期时间，则redis分布式锁根本不会被释放，就彻底锁死了，即发生死锁
+    // 其原因在于我们先做 setnx 判断，然后再做 expire设置， 这两个操作结合不具有原子性，所以会发生错误
+    // 折中方案，delLock(); 更好的方案：closeOrderTaskV3()
 //    @Scheduled(cron="0 */1 * * * ?") // 每一分钟（每个一分钟的整数倍的时候执行该方法）
     public void closeOrderTaskV2() {
         log.info("关闭订单定时任务启动");
@@ -57,7 +59,7 @@ public class CloseOrderTask {
         log.info("关闭订单定时任务结束");
     }
 
-    // 分布式锁
+    // 分布式锁, 但其实这个实现仍然是错误的，而且错误原因和上面的一模一样，即操作不具有原子性
     @Scheduled(cron="0 */1 * * * ?") // 每一分钟（每个一分钟的整数倍的时候执行该方法）
     public void closeOrderTaskV3() {
         log.info("关闭订单定时任务启动");
