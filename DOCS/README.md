@@ -232,3 +232,7 @@ nginx-1.10.2
     * 主键不明确 Table-Level Lock
         * SELECT * FROM mmall_product WHERE id <> ' 66' FOR UPDATE;
         * SELECT * FROM mmall_product WHERE id LIKE '66' FOR UPDATE;
+* Spring Schedule+Redis分布式锁构建分布式任务调度
+    * Redis分布式锁防死锁
+    * Redis分布式锁双重防死锁
+    * 使用Spring Schedule+Redis锁实现分布式定时关单

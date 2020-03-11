@@ -44,6 +44,23 @@ public class RedisShardedPoolUtil {
         return result;
     }
 
+    public static String getSet(String key, String value) {
+        ShardedJedis jedis = null;
+        String result = null;
+
+        try {
+            jedis = RedisShardedPool.getJedis();
+            result = jedis.getSet(key, value);
+        } catch (Exception e) {
+            log.error("getset key: {}, error: {}", key, e);
+            RedisShardedPool.returnBrokenResource(jedis);
+            return result;
+        }
+
+        RedisShardedPool.returnResource(jedis);
+        return result;
+    }
+
     // redis setEx - 设置带ttl的键值对
     // exTime: 设置ttl(s)
     public static String setEx(String key, int exTime, String value) {
