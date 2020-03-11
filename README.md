@@ -195,4 +195,8 @@ nginx-1.10.2
     * Spring Schedule Cron 生成器
     * Mysql 行锁和表锁
         * SELECT ... FOR UPDATE - 悲观锁 -> 以后要改进为乐观锁
-    
+    * 使用Spring Schedule实现定时关单
+* Spring Schedule+Redis分布式锁构建分布式任务调度
+    * Redis分布式锁防死锁
+    * Redis分布式锁双重防死锁
+    * 使用Spring Schedule+Redis锁实现分布式定时关单
