@@ -1,16 +1,20 @@
 package com.mmall.task;
 
 import com.mmall.common.Const;
+import com.mmall.common.RedissonManager;
 import com.mmall.service.IOrderService;
 import com.mmall.util.PropertiesUtil;
 import com.mmall.util.RedisShardedPoolUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.redisson.api.RLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 // Spring Schedule 实现定时关单任务
 // PS: 很多错误实现例子存在这里
@@ -21,6 +25,9 @@ public class CloseOrderTask {
     @Autowired
     private IOrderService iOrderService;
 
+    @Autowired
+    private RedissonManager redissonManager;
+
     // @PreDestroy在使用tomcat shutdown程序关闭tomcat时会执行这个函数并释放redis分布式锁
     // 但是如果直接通过任务管理器 kill 掉进程，则不会释放redis分布式锁。
     // 并且当分布式锁非常之多的情况下，关闭tomcat需要的时间会非常长
@@ -29,7 +36,7 @@ public class CloseOrderTask {
         RedisShardedPoolUtil.del(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
     }
 
-    // 该方法每分钟执行一次，目的是自动关闭创建了并经过hour（默认是2个小时）个小时未付款的订单
+    // 该方法每分钟执行一次，目的是自动关闭创建了经过hour（默认是2个小时）个小时未付款的订单
     // 加上分布式锁 否则多个tomcat集群的环境下每个tomcat都在执行这个定时任务
     // 很容易导致数据错乱（因为大量tomcat都在修改DB数据）和服务器资源浪费
 //    @Scheduled(cron="0 */1 * * * ?") // 每一分钟（每个一分钟的整数倍的时候执行该方法）
@@ -60,7 +67,7 @@ public class CloseOrderTask {
     }
 
     // 分布式锁, 但其实这个实现仍然是错误的，而且错误原因和上面的一模一样，即操作不具有原子性
-    @Scheduled(cron="0 */1 * * * ?") // 每一分钟（每个一分钟的整数倍的时候执行该方法）
+//    @Scheduled(cron="0 */1 * * * ?") // 每一分钟（每个一分钟的整数倍的时候执行该方法）
     public void closeOrderTaskV3() {
         log.info("关闭订单定时任务启动");
 
@@ -94,6 +101,34 @@ public class CloseOrderTask {
 
         log.info("关闭订单定时任务结束");
     }
+
+    // 这个版本使用Redisson搞定
+    @Scheduled(cron="0 */1 * * * ?") // 每一分钟（每个一分钟的整数倍的时候执行该方法）
+    public void closeOrderTaskV4() {
+        RLock lock = redissonManager.getRedisson().getLock(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
+        boolean getLock = false;
+        try {
+            if (getLock = lock.tryLock(2, 5, TimeUnit.SECONDS)) {
+                log.info("Redisson获取分布式锁: {}, ThreadName: {}"
+                        , Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK, Thread.currentThread().getName());
+                int hour = Integer.parseInt(Objects.requireNonNull(PropertiesUtil.getProperty("close.order.task.time.hour")));
+//                iOrderService.closeOrder(hour);
+            } else {
+                log.info("Redisson没有获取分布式锁: {}, ThreadName: {}"
+                        , Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK, Thread.currentThread().getName());
+            }
+        } catch (InterruptedException e) {
+            log.info("Redisson分布式锁获取异常: {}, ThreadName: {}"
+                    , Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK, Thread.currentThread().getName());
+        } finally {
+            if (!getLock) {
+                return;
+            }
+            lock.unlock();
+            log.info("Redisson分布式锁释放锁");
+        }
+    }
+
 
     private void closeOrder(String lockName) {
         RedisShardedPoolUtil.expire(lockName, 50); // 有效期50秒，防止死锁

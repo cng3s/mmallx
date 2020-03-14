@@ -107,7 +107,7 @@ nginx-1.10.2
   * 解析支付宝SDK对接源码
   * RSA1 和 RSA2 验证签名及加解密
   * 避免支付宝重复通知和数据校验
-  * natapp外网穿透 和 tomcat remote debug
+  * natapp 外网穿透 和 tomcat remote debug
   * 生成二维码，并持久化到图片服务器
 * 测试支付模块
   * 支付宝沙箱支付对接
@@ -212,6 +212,7 @@ nginx-1.10.2
     * <mvc:interceptors>
     * <mvc:interceptor>
     * <mvc:exclude-mapping path="" />
+    * 配置：
 ### Spring Schedule
 * 什么是Spring Schedule - 用于作业调度，如定时任务的框架
 * Spring Schedule使用/配置

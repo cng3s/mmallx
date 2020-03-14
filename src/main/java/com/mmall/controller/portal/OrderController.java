@@ -39,13 +39,13 @@ public class OrderController {
     public ServerResponse<?> create(HttpServletRequest httpServletRequest, Integer shippingId) {
 
         String loginToken = CookieUtil.readLoginToken(httpServletRequest);
-            if (StringUtils.isEmpty(loginToken)) {
+        if (StringUtils.isEmpty(loginToken)) {
             return ServerResponse.createByError("用户未登录，无法获取当前用户信息");
         }
 
         String userJsonStr = RedisShardedPoolUtil.get(loginToken);
         User user = JsonUtil.string2Obj(userJsonStr, User.class);
-            if (user == null) {
+        if (user == null) {
             return ServerResponse.createByError("用户未登录，无法获取当前用户信息");
         }
         return iOrderService.createOrder(user.getId(), shippingId);

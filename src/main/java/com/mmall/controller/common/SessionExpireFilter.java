@@ -14,6 +14,7 @@ import java.io.IOException;
 // Filter类是拦截器，用于拦截所有定义中匹配到的规则的请求
 // 而该定义是写在web.xml下的sessionExpireFilter
 // 拦截后强制先执行该类中的(doFilter)方法，然后在执行后面的请求操作
+// 注：如想使用该类则解除web.xml相关的注释，并注释上spring-session相关的配置信息
 public class SessionExpireFilter implements Filter {
 
     @Override

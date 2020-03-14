@@ -58,6 +58,7 @@ public class RedisShardedPool {
         // 默认为true。不设置也可以。
         config.setBlockWhenExhausted(true);
 
+        // 注，这里添加JedisShardInfo也可以通过数组遍历的方式，前提是把redisIp设成数组形式
         // 这里timeout单位是ms
         JedisShardInfo info1 = new JedisShardInfo(redis1Ip, redis1Port, 1000*2); // ttl timeout=2s
 

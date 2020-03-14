@@ -34,8 +34,8 @@ public class AuthorityInterceptor implements HandlerInterceptor {
 
         // 解析HandlerMethod
         String methodName = handlerMethod.getMethod().getName();
-        // 注：比较大型复杂的项目的时候，不建议使用getSimpleName()方法，而应该使用getName()方法
-        // getSimpleName()方法只返回类名，而不返回包名和类名。这就有可能该类名和其他类名相同，导致判断出现错误。
+        // 注：比较大型复杂的项目的时候，不建议使用getSimpleName()方法，而应该使用getName()方法，因为getName()会返回包名和类名
+        // getSimpleName()方法只返回类名，就有可能该类名和其他不同包的类名相同，导致判断出现错误。
         String className = handlerMethod.getBean().getClass().getSimpleName();
 
         // 解析参数，具体的参数key 以及 value 是什么，我们打印日志
@@ -75,7 +75,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
         if (user == null || (user.getRole() != Const.Role.ROLE_ADMIN)) {
             // 肯定是返回false.即不会调用Controller的方法
             httpServletResponse.reset(); // 这里要添加reset,否则会报异常:getWriter() has already been called for this response
-            httpServletResponse.setCharacterEncoding("UTF-8"); // 这里要设置编码，否则会乱码
+            httpServletResponse.setCharacterEncoding("UTF-8"); // 设置为UTF-8编码，否则会乱码
             httpServletResponse.setContentType("application/json;charset=UTF-8"); // 这里要设置返回值的类型，因为全是json接口
 
             PrintWriter out = httpServletResponse.getWriter();
